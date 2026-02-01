@@ -1,0 +1,434 @@
+[
+    {
+        "user_id": "1",
+        "topic_id": "ds",
+        "timestamp": "2026-01-30T00:41:55.290880",
+        "score": 66.67,
+        "avg_time": 2.23,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "ds",
+        "timestamp": "2026-01-30T00:42:52.652710",
+        "score": 66.67,
+        "avg_time": 2.92,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.2304919953761619,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "ds",
+        "timestamp": "2026-01-30T00:55:07.571453",
+        "score": 33.33,
+        "avg_time": 8.64,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22887340483833085,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T01:01:35.354561",
+        "score": 33.33,
+        "avg_time": 2.37,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T01:06:58.446913",
+        "score": 0.0,
+        "avg_time": 30.0,
+        "adaptation": {
+            "new_difficulty": "easy",
+            "speed_label": "Slow"
+        },
+        "mastery": 0.2304919953761619,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T01:11:11.122366",
+        "score": 0.0,
+        "avg_time": 5.54,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22887340483833085,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:18:12.893167",
+        "score": 0.0,
+        "avg_time": 16.01,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Steady"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:18:24.704729",
+        "score": 0.0,
+        "avg_time": 20.0,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Steady"
+        },
+        "mastery": 0.2304919953761619,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:18:30.994803",
+        "score": 0.0,
+        "avg_time": 24.38,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Steady"
+        },
+        "mastery": 0.22887340483833085,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:19:37.591822",
+        "score": 66.67,
+        "avg_time": 9.74,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22862278631383154,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:19:41.758406",
+        "score": 100.0,
+        "avg_time": 14.81,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Steady"
+        },
+        "mastery": 0.6571746014110327,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Proceed to next topic",
+            "message": "Great job! You're showing steady progress.",
+            "next_difficulty": "medium"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:22:10.899864",
+        "score": 0.0,
+        "avg_time": 2.43,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.35465348864572305,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T01:29:02.549114",
+        "score": 66.67,
+        "avg_time": 5.75,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22862278631383154,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "2",
+        "topic_id": "ds",
+        "timestamp": "2026-01-30T01:35:35.089242",
+        "score": 33.33,
+        "avg_time": 4.19,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "2",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T01:39:42.693904",
+        "score": 100.0,
+        "avg_time": 7.9,
+        "adaptation": {
+            "new_difficulty": "hard",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.7268292682926829,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Proceed to next topic",
+            "message": "Great job! You're showing steady progress.",
+            "next_difficulty": "medium"
+        }
+    },
+    {
+        "user_id": "2",
+        "topic_id": "ds",
+        "timestamp": "2026-01-30T10:42:37.171973",
+        "score": 0.0,
+        "avg_time": 4.89,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.2304919953761619,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "2",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T10:50:34.833386",
+        "score": 0.0,
+        "avg_time": 8.61,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "2",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T10:55:20.153584",
+        "score": 33.33,
+        "avg_time": 6.05,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.3996429061942041,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T11:08:21.547817",
+        "score": 33.33,
+        "avg_time": 3.91,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22857589299665615,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T11:08:29.451927",
+        "score": 66.67,
+        "avg_time": 5.63,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22857589299665615,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "dbms",
+        "timestamp": "2026-01-30T11:11:43.095930",
+        "score": 100.0,
+        "avg_time": 7.1,
+        "adaptation": {
+            "new_difficulty": "hard",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.7696848022485445,
+        "behavior_cluster": "General Learner",
+        "recommendation": {
+            "action": "Proceed to next topic",
+            "message": "Great job! You're showing steady progress.",
+            "next_difficulty": "medium"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "os",
+        "timestamp": "2026-01-30T14:31:11.571257",
+        "score": 66.67,
+        "avg_time": 9.1,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.22857589299665615,
+        "behavior_cluster": "Detail-Oriented",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you. We noticed you take your time\u2014that's great for deep understanding!",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "3",
+        "topic_id": "ds",
+        "timestamp": "2026-02-01T11:11:06.464273",
+        "score": 66.67,
+        "avg_time": 7.71,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "Steady Learner",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you.",
+            "next_difficulty": "easy"
+        }
+    },
+    {
+        "user_id": "1",
+        "topic_id": "cn",
+        "timestamp": "2026-02-01T11:22:58.383841",
+        "score": 33.33,
+        "avg_time": 6.91,
+        "adaptation": {
+            "new_difficulty": "medium",
+            "speed_label": "Fast"
+        },
+        "mastery": 0.24067796610169492,
+        "behavior_cluster": "Detail-Oriented",
+        "recommendation": {
+            "action": "Revision Recommended",
+            "message": "You might want to review this concept again. We've unlocked some simpler resources for you. We noticed you take your time\u2014that's great for deep understanding!",
+            "next_difficulty": "easy"
+        }
+    }
+]

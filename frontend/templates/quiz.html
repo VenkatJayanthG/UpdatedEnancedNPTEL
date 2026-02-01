@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Edubox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .quiz-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .question-card {
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .option {
+            display: block;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .option:hover {
+            border-color: var(--primary-color);
+            background: rgba(0, 109, 91, 0.02);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background: rgba(0, 109, 91, 0.05);
+        }
+
+        .timer-bar {
+            height: 4px;
+            background: #eee;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .timer-fill {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        /* AI Loading Overlay */
+        #ai-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 245, 0.98);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .ai-eval-icon {
+            width: 100px;
+            height: 100px;
+            color: var(--primary-color);
+            animation: pulse-rotate 2.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-rotate {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.1) rotate(180deg);
+                opacity: 1;
+                filter: drop-shadow(0 0 15px rgba(0, 109, 91, 0.3));
+            }
+
+            100% {
+                transform: scale(1) rotate(360deg);
+                opacity: 0.8;
+            }
+        }
+
+        .loading-text {
+            margin-top: 30px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .loading-dots:after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: ' .';
+            }
+
+            40% {
+                content: ' . .';
+            }
+
+            60% {
+                content: ' . . .';
+            }
+
+            80%,
+            100% {
+                content: '';
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="logo"
+            style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            Edubox
+        </a>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('progress_page') }}">Progress</a>
+            <a href="{{ url_for('logout') }}" style="color: #e74c3c;">Logout</a>
+        </div>
+    </nav>
+
+    <!-- AI Loading Overlay HTML -->
+    <div id="ai-loading-overlay">
+        <div class="ai-eval-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 2v4" />
+                <path d="M12 18v4" />
+                <path d="M4.93 4.93l2.83 2.83" />
+                <path d="M16.24 16.24l2.83 2.83" />
+                <path d="M2 12h4" />
+                <path d="M18 12h4" />
+                <path d="M4.93 19.07l2.83-2.83" />
+                <path d="M16.24 7.76l2.83-2.83" />
+            </svg>
+        </div>
+        <div class="loading-text">
+            <h2 style="color: var(--text-dark); margin-bottom: 10px;">AI is evaluating your responses<span
+                    class="loading-dots"></span></h2>
+            <p style="color: var(--text-light); font-size: 1.1rem;">Calculating mastery levels and crafting personalized
+                feedback...</p>
+        </div>
+    </div>
+
+    <div class="quiz-container animate-fade">
+        <div class="timer-bar">
+            <div id="timer" class="timer-fill"></div>
+        </div>
+
+        <div id="quiz-content">
+            <div id="question-area">
+                {% for q in quiz.questions %}
+                <div class="question-card {% if loop.index == 1 %}active{% endif %}" data-q-id="{{ q.id }}">
+                    <span style="color: var(--text-light); font-size: 0.9rem;">Question {{ loop.index }} of {{
+                        quiz.questions|length }}</span>
+                    <h2 style="margin: 15px 0 25px;">{{ q.text }}</h2>
+
+                    {% for opt in q.options %}
+                    <div class="option" onclick="selectOption(this, '{{ opt }}')">{{ opt }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+                <button id="nextBtn" class="btn btn-primary" style="width: auto;" onclick="handleNext()">Next
+                    Question</button>
+            </div>
+        </div>
+
+        <div id="result-area" style="display: none; text-align: center;">
+            <div style="font-size: 4rem; margin-bottom: 20px;">🎉</div>
+            <h2 id="result-title">Quiz Completed!</h2>
+            <p id="result-score"
+                style="font-size: 2rem; font-weight: 700; color: var(--primary-color); margin: 10px 0;"></p>
+
+            <div class="result-stats" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 30px 0;">
+                <div class="stat-card"
+                    style="padding: 20px; background: rgba(0, 109, 91, 0.05); border-radius: 12px; border: 1px solid rgba(0, 109, 91, 0.1);">
+                    <span
+                        style="display: block; font-size: 0.9rem; color: var(--text-light); margin-bottom: 5px;">Knowledge
+                        Mastery</span>
+                    <strong id="result-mastery" style="font-size: 1.2rem; color: var(--primary-color);">--</strong>
+                </div>
+                <div class="stat-card"
+                    style="padding: 20px; background: rgba(255, 160, 122, 0.05); border-radius: 12px; border: 1px solid rgba(255, 160, 122, 0.1);">
+                    <span
+                        style="display: block; font-size: 0.9rem; color: var(--text-light); margin-bottom: 5px;">Learning
+                        Style</span>
+                    <strong id="result-cluster" style="font-size: 1.2rem; color: var(--secondary-color);">--</strong>
+                </div>
+            </div>
+
+            <div id="recommendation-box"
+                style="padding: 25px; background: #f9f9f9; border-radius: 12px; margin-bottom: 30px; text-align: left; border-left: 4px solid var(--primary-color);">
+                <h4 id="rec-action" style="color: var(--primary-color); margin-bottom: 10px;">--</h4>
+                <p id="rec-message" style="color: var(--text-light); line-height: 1.5;"></p>
+            </div>
+
+            <div id="ai-feedback-area"
+                style="margin-top: 30px; text-align: left; background: #fff; padding: 25px; border-radius: 12px; border: 1px solid #eee; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 15px; color: var(--primary-color); font-size: 1.2rem;">AI Question Insights
+                </h3>
+                <div id="question-breakdown">
+                    <!-- Questions will be injected here -->
+                </div>
+            </div>
+
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="width: auto;">Return to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestionIdx = 0;
+        const quizQuestions = {{ quiz.questions | tojson | safe }};
+        let responses = [];
+        let startTime = Date.now();
+        let timeLeft = 30;
+        let timerInterval;
+
+        function startTimer() {
+            timeLeft = 30;
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const percent = (timeLeft / 30) * 100;
+                document.getElementById('timer').style.width = percent + '%';
+
+                if (timeLeft <= 0) {
+                    handleNext();
+                }
+            }, 1000);
+        }
+
+        function selectOption(element, value) {
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function handleNext() {
+            const activeCard = document.querySelector('.question-card.active');
+            const selectedOpt = activeCard.querySelector('.option.selected');
+            const timeTaken = (Date.now() - startTime) / 1000;
+
+            responses.push({
+                question_id: quizQuestions[currentQuestionIdx].id,
+                selected_answer: selectedOpt ? selectedOpt.innerText : null,
+                time_taken: timeTaken
+            });
+
+            if (currentQuestionIdx < quizQuestions.length - 1) {
+                activeCard.classList.remove('active');
+                currentQuestionIdx++;
+                document.querySelectorAll('.question-card')[currentQuestionIdx].classList.add('active');
+                startTime = Date.now();
+                startTimer();
+                if (currentQuestionIdx === quizQuestions.length - 1) {
+                    document.getElementById('nextBtn').innerText = 'Submit Quiz';
+                }
+            } else {
+                submitQuiz();
+            }
+        }
+
+        async function submitQuiz() {
+            clearInterval(timerInterval);
+            document.getElementById('ai-loading-overlay').style.display = 'flex';
+
+            const response = await fetch('/api/quiz-submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    topic_id: '{{ quiz.topic_id }}',
+                    difficulty: '{{ quiz.difficulty }}',
+                    responses: responses
+                })
+            });
+            const result = await response.json();
+
+            document.getElementById('ai-loading-overlay').style.display = 'none';
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('result-area').style.display = 'block';
+
+            // Populate results
+            document.getElementById('result-score').innerText = `Score: ${result.score}%`;
+            document.getElementById('result-mastery').innerText = (result.mastery * 100).toFixed(0) + '%';
+            document.getElementById('result-cluster').innerText = result.behavior_cluster || result.cluster;
+
+            if (result.recommendation) {
+                document.getElementById('rec-action').innerText = result.recommendation.action;
+                document.getElementById('rec-message').innerText = result.recommendation.message;
+            }
+
+            // AI Breakdown
+            const breakdownDiv = document.getElementById('question-breakdown');
+            breakdownDiv.innerHTML = '';
+
+            const resultsToDisplay = result.question_results || result.results || [];
+            resultsToDisplay.forEach((q, idx) => {
+                const qData = quizQuestions.find(orig => String(orig.id) === String(q.question_id));
+                const item = document.createElement('div');
+                item.style.marginBottom = '20px';
+                item.style.padding = '15px';
+                item.style.borderLeft = `5px solid ${q.is_correct ? '#006D5B' : '#FFA07A'}`;
+                item.style.background = '#fefefe';
+
+                item.innerHTML = `
+                    <div style="font-weight: 600; margin-bottom: 5px;">Q${idx + 1}: ${qData ? qData.text : 'Question'}</div>
+                    <div style="font-size: 0.9rem; color: #555;">
+                        <span style="color: ${q.is_correct ? '#006D5B' : '#d9534f'}; font-weight: 700;">
+                            ${q.is_correct ? 'Correct' : 'Incorrect'}
+                        </span>
+                        <span> • ${q.feedback}</span>
+                    </div>
+                `;
+                breakdownDiv.appendChild(item);
+            });
+        }
+
+        if (quizQuestions && quizQuestions.length > 0) {
+            startTimer();
+            if (quizQuestions.length === 1) {
+                document.getElementById('nextBtn').innerText = 'Submit Quiz';
+            }
+        }
+    </script>
+</body>
+
+</html>

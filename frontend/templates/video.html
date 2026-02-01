@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ video.title }} - Edubox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .video-player-container {
+            background: #000;
+            aspect-ratio: 16/9;
+            width: 100%;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .video-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .behavior-log {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 109, 91, 0.05);
+            border-radius: var(--border-radius);
+            font-size: 0.9rem;
+        }
+
+        /* AI Loading Overlay */
+        #ai-loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 245, 0.98);
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .ai-brain {
+            width: 100px;
+            height: 100px;
+            color: var(--primary-color);
+            animation: bounce-pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: scale(1.15);
+                opacity: 1;
+                filter: drop-shadow(0 0 15px rgba(0, 109, 91, 0.4));
+            }
+        }
+
+        .loading-text {
+            margin-top: 30px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .loading-dots:after {
+            content: ' .';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+
+        @keyframes dots {
+
+            0%,
+            20% {
+                content: ' .';
+            }
+
+            40% {
+                content: ' . .';
+            }
+
+            60% {
+                content: ' . . .';
+            }
+
+            80%,
+            100% {
+                content: '';
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="logo" style="text-decoration: none;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            Edubox
+        </a>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('progress_page') }}">Progress</a>
+            <a href="{{ url_for('logout') }}" style="color: #e74c3c;">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <div class="video-header animate-fade">
+            <div>
+                <span
+                    style="color: var(--primary-color); font-weight: 600; text-transform: uppercase; font-size: 0.8rem;">Learning
+                    Module</span>
+                <h1 style="margin-top: 5px;">{{ video.title }}</h1>
+            </div>
+            <a href="{{ url_for('quiz_page', topic_id=video.id) }}" class="btn btn-primary" style="width: auto;"
+                onclick="showLoading()">Proceed
+                to Quiz</a>
+        </div>
+
+        <!-- AI Loading Overlay HTML -->
+        <div id="ai-loading-overlay">
+            <div class="ai-brain">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                        d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.58 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 4.46-2.54Z" />
+                    <path
+                        d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.58 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-4.46-2.54Z" />
+                </svg>
+            </div>
+            <div class="loading-text">
+                <h2 style="color: var(--text-dark); margin-bottom: 10px;">AI is crafting your quiz<span
+                        class="loading-dots"></span></h2>
+                <p style="color: var(--text-light); font-size: 1.1rem;">Analyzing your learning patterns and video
+                    context...</p>
+            </div>
+        </div>
+
+        <div class="video-player-container animate-fade">
+            <div id="player"></div>
+        </div>
+
+        <div class="behavior-log animate-fade">
+            <h3 style="margin-bottom: 10px;">Contextual Behavior Tracking</h3>
+            <p>We are tracking your learning patterns to adapt the difficulty levels.
+                <span id="stat-pauses">Pauses: 0</span> |
+                <span id="stat-seeks">Seeks: 0</span> |
+                <span id="stat-percent">Watched: 0%</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        function showLoading() {
+            document.getElementById('ai-loading-overlay').style.display = 'flex';
+        }
+
+        let player;
+        let trackingData = {
+            pause_count: 0,
+            rewatch_count: 0,
+            skip_ratio: 0,
+            watch_percentage: 0,
+            last_time: 0,
+            total_duration: 0,
+            max_reached: 0
+        };
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: '{{ video.video_id }}',
+                playerVars: {
+                    'playsinline': 1,
+                    'modestbranding': 1,
+                    'rel': 0
+                },
+                events: {
+                    'onStateChange': onPlayerStateChange,
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            trackingData.total_duration = player.getDuration();
+
+            // Restore user's last position
+            fetch('/api/user-progress/{{ video.id }}')
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.last_position > 0) {
+                        player.seekTo(data.last_position, true);
+                        trackingData.max_reached = data.last_position;
+                        document.getElementById('stat-percent').innerText = `Watched: ${data.watch_percentage}%`;
+                    }
+                })
+                .catch(err => console.log('No saved progress'));
+
+            setInterval(updateProgress, 2000);
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data == YT.PlayerState.PAUSED) {
+                trackingData.pause_count++;
+                document.getElementById('stat-pauses').innerText = `Pauses: ${trackingData.pause_count}`;
+                saveTrackingData();
+            }
+        }
+
+        function updateProgress() {
+            if (!player || typeof player.getCurrentTime !== 'function') return;
+
+            const currentTime = player.getCurrentTime();
+
+            // Detect Seek
+            if (Math.abs(currentTime - trackingData.last_time) > 3) {
+                if (currentTime < trackingData.last_time) {
+                    trackingData.rewatch_count++;
+                    document.getElementById('stat-seeks').innerText = `Seeks (Rewatch): ${trackingData.rewatch_count}`;
+                }
+            }
+
+            // Update Max Reached
+            if (currentTime > trackingData.max_reached) {
+                trackingData.max_reached = currentTime;
+            }
+
+            trackingData.watch_percentage = Math.round((trackingData.max_reached / trackingData.total_duration) * 100);
+            document.getElementById('stat-percent').innerText = `Watched: ${trackingData.watch_percentage}%`;
+
+            trackingData.last_time = currentTime;
+
+            if (trackingData.watch_percentage % 10 === 0) { // Save every 10%
+                saveTrackingData();
+            }
+        }
+
+        async function saveTrackingData() {
+            try {
+                await fetch('/api/video-track', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        topic_id: '{{ video.id }}',
+                        ...trackingData
+                    })
+                });
+            } catch (err) {
+                console.error("Tracking save failed", err);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Edubox</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('index') }}" class="logo"
+            style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+            </svg>
+            Edubox
+        </a>
+        <div class="nav-links">
+            <a href="#courses">Courses</a>
+            <a href="{{ url_for('progress_page') }}">Progress</a>
+            <a href="{{ url_for('logout') }}" style="color: #e74c3c;">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <header class="hero-section animate-fade">
+            <h1>Welcome back, {{ user_name }}! 👋</h1>
+            <p style="color: var(--text-light);">Continue your learning journey where you left off.</p>
+        </header>
+
+        <section id="progress" class="progress-summary animate-fade"
+            style="margin-bottom: 50px; display: flex; gap: 30px; flex-wrap: wrap;">
+            <div
+                style="flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                <h3>Mastery Overview</h3>
+                <canvas id="masteryChart" style="margin-top: 15px;"></canvas>
+            </div>
+            <div
+                style="flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: var(--border-radius); box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                <h3>Learning Speed</h3>
+                <div style="margin-top: 20px;">
+                    <p style="font-size: 0.9rem; color: var(--text-light);">Your current pace:</p>
+                    <p style="font-size: 1.5rem; font-weight: 700; color: var(--primary-color);">
+                        {{ learning_speed }} Learner {{ '⚡️' if learning_speed == 'Fast' else '🐢' if learning_speed ==
+                        'Slow' else '⚖️' }}
+                    </p>
+
+                    <div
+                        style="margin-top: 15px; padding: 12px; background: rgba(0,109,91,0.05); border-radius: 8px; border-left: 3px solid var(--primary-color);">
+                        <p
+                            style="font-size: 0.75rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px;">
+                            Behavioral Persona</p>
+                        <p style="font-size: 1.1rem; font-weight: 600; color: var(--text-dark);">{{ learning_cluster }}
+                        </p>
+                    </div>
+
+                    <p style="margin-top: 15px; font-size: 0.85rem; font-style: italic; color: #666;">"{{ speed_message
+                        }}"</p>
+                </div>
+            </div>
+        </section>
+
+        <h2 id="courses">Computer Science Topics</h2>
+        <div class="course-grid">
+            {% for video in videos %}
+            <div class="course-card animate-fade">
+                <div
+                    style="background: rgba(0,109,91,0.05); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: inline-block;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+                    </svg>
+                </div>
+                <h3>{{ video.title }}</h3>
+                <p style="font-size: 0.9rem; color: var(--text-light); height: 50px; overflow: hidden;">{{
+                    video.description }}</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width:{{ video.progress|default(0) }}%;"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85rem; font-weight: 600;">{{ video.progress|default(0) }}% Complete</span>
+                    <a href="{{ url_for('video_page', topic_id=video.id) }}" class="btn btn-primary"
+                        style="width: auto; padding: 8px 20px;">Continue</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        // Mastery Chart
+        const masteryCtx = document.getElementById('masteryChart').getContext('2d');
+        const masteryData = {
+            labels: {{ mastery_labels | tojson | safe }},
+        datasets: [{
+            label: 'Concept Mastery (%)',
+            data: {{ mastery_history | tojson | safe }},
+            borderColor: '#006D5B',
+            tension: 0.4,
+            fill: true,
+            backgroundColor: 'rgba(0, 109, 91, 0.1)'
+            }]
+        };
+
+        new Chart(masteryCtx, {
+            type: 'line',
+            data: masteryData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function (value) { return value + "%"; }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
